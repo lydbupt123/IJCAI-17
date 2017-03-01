@@ -5,6 +5,7 @@ holiday_list=['2015-9-3','2015-9-4','2015-9-5','2015-9-26','2015-9-27','2015-10-
 index=0
 for i in holiday_list:
     holiday_list[index]=datetime.datetime.strptime(i,'%Y-%m-%d').date()
+    index+=1
 wr=open('full_new.csv','a')
 for line in open('full.csv'):
     line=line.replace('\n','')
@@ -14,5 +15,11 @@ for line in open('full.csv'):
         wr.write('shop_id,city_name,location_id,per_pay,score,comment_cnt,shop_level,year,month,day,weekend,holiday,air,h_tem,l_tem,weather,cate_1_name,cate_2_name,cate_3_name,cus_flow\n')
         continue
     date=datetime.datetime.strptime(array[7],'%Y-%m-%d').date()
-    wr.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n'%(array[0],array[1],array[2],array[3],array[4],array[5],array[6],date.year,date.month,date.day,date.weekday(),array[8],array[9],array[10],array[11],array[12],array[13],array[14],array[15]))
+    isHoliday=0
+    try:
+        if holiday_list.index(date)>=0:
+            isHoliday=1
+    except:
+        isHoliday=0
+    wr.write('%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n'%(array[0],array[1],array[2],array[3],array[4],array[5],array[6],date.year,date.month,date.day,date.weekday(),isHoliday,array[8],array[9],array[10],array[11],array[12],array[13],array[14],array[15]))
 wr.close()
